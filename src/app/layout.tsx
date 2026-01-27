@@ -4,6 +4,8 @@ import "./globals.css";
 import { Navbar1 } from "@/components/navbar1";
 import { Footer2 } from "@/components/footer2";
 import { FeaturedTutors } from "@/components/feature17";
+import { TutorCard } from "./components/tutors/TutorCard";
+
 
 
 const geistSans = Geist({
@@ -37,6 +39,8 @@ export default function RootLayout({
         {children}
 
         <FeaturedTutors></FeaturedTutors>
+
+        <TutorCard></TutorCard>
 
         <Footer2></Footer2>
       </body>
