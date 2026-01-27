@@ -6,6 +6,7 @@ import { Footer2 } from "@/components/footer2";
 import { FeaturedTutors } from "@/components/feature17";
 import { TutorCard } from "./components/tutors/TutorCard";
 import { HelpCenter } from "@/components/help1";
+import { Logos3 } from "@/components/logos3";
 
 
 
@@ -43,6 +44,8 @@ export default function RootLayout({
         <FeaturedTutors></FeaturedTutors>
 
         <TutorCard></TutorCard>
+
+        <Logos3></Logos3>
 
         <HelpCenter></HelpCenter>
 
