@@ -1,9 +1,10 @@
+import { Button } from "@/components/ui/button";
 
 
 export default function HomePage() {
   return (
     <div>
-      This is HomePage
+      <Button variant={"outline"}>Click Here</Button>
     </div>
   );
 }
