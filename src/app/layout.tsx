@@ -4,9 +4,10 @@ import "./globals.css";
 import { Navbar1 } from "@/components/navbar1";
 import { Footer2 } from "@/components/footer2";
 import { FeaturedTutors } from "@/components/feature17";
-import { TutorCard } from "./components/tutors/TutorCard";
+// import { TutorCard } from "./components/tutors/TutorCard";
 import { HelpCenter } from "@/components/help1";
 import { Logos3 } from "@/components/logos3";
+import FAQ from "./components/sections/faq";
 
 
 
@@ -43,9 +44,11 @@ export default function RootLayout({
 
         <FeaturedTutors></FeaturedTutors>
 
-        <TutorCard></TutorCard>
+        {/* <TutorCard></TutorCard> */}
 
         <Logos3></Logos3>
+
+        <FAQ></FAQ>
 
         <HelpCenter></HelpCenter>
 
