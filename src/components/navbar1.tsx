@@ -27,6 +27,9 @@ import {
   SheetTrigger,
 } from "@/components/ui/sheet";
 import { useRole } from "@/hooks/useRole";
+import StudentMenu from "@/app/components/navbar/StudentMenu";
+import TutorMenu from "@/app/components/navbar/TutorMenu";
+import AdminMenu from "@/app/components/navbar/AdminMenu";
 
 interface MenuItem {
   title: string;
