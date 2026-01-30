@@ -13,10 +13,7 @@ export const fetcher = async (url: string, options: RequestInit = {}
 
     const data = await res.json();
 
-    if (!res.ok) {
-        const error = await res.json();
-        throw new Error(error.message || "Something went wrong");
-    }
+    if (!res.ok) throw new Error(data.message || "Something went wrong");
 
     return data;
 }
