@@ -1,4 +1,4 @@
-import TutorCard from "../components/StatsCard";
+import TutorCard from "../components/TutorCard";
 import { getTutorDashboard } from "../services/tutor.service";
 
 
