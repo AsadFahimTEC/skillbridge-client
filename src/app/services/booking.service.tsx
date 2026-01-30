@@ -1,7 +1,10 @@
-export default function BookingServicesPage() {
-  return (
-    <div>
-      This is BookingServicesPage
-    </div>
-  );
+import { fetcher } from "./api";
+
+
+export const getStudentDashboard = () => {
+  return fetcher("/dashboard");
 }
+
+export const getStudentBookings = () => {
+  return fetcher("/dashboard/bookings");
+};
