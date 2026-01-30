@@ -6,6 +6,7 @@ export const fetcher = async(url: string, options?: RequestInit) => {
         headers: {
             "Content-Type": "application/json",
         },
+        cache: "no-store",
         ...options,
     });
 
