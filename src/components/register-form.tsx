@@ -22,7 +22,6 @@ import { toast } from "sonner";
 import * as z from "zod";
 import { useRouter } from "next/navigation";
 
-/* ---------------- Schema ---------------- */
 const formSchema = z.object({
   name: z.string().min(1, "Name is required"),
   email: z.string().email("Invalid email address"),
@@ -30,7 +29,6 @@ const formSchema = z.object({
   role: z.enum(["STUDENT", "TUTOR"]),
 });
 
-/* ---------------- Component ---------------- */
 export function RegisterForm(props: React.ComponentProps<typeof Card>) {
   const router = useRouter();
 
