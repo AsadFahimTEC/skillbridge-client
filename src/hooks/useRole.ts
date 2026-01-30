@@ -7,6 +7,6 @@ export const useRole = () => {
     return {
         isStudent: user?.role === UserRole.STUDENT,
         isTutor: user?.role === UserRole.TUTOR,
-        isADMIN: user?.role === UserRole.ADMIN,
+        isAdmin: user?.role === UserRole.ADMIN,
     };
 };

@@ -26,6 +26,7 @@ import {
   SheetTitle,
   SheetTrigger,
 } from "@/components/ui/sheet";
+import { useRole } from "@/hooks/useRole";
 
 interface MenuItem {
   title: string;
@@ -81,11 +82,16 @@ const Navbar1 = ({
   },
   className,
 }: Navbar1Props) => {
+  const {isStudent, isTutor, isAdmin} = useRole();
+
   return (
     <section className={cn("py-4", className)}>
       <div className="container mx-auto px-4">
         {/* Desktop Menu */}
         <nav className="hidden items-center justify-between lg:flex">
+          {isStudent &&<StudentMenu />}
+          {isTutor && <TutorMenu/>}
+          {isAdmin && <AdminMenu/>}
           <div className="flex items-center gap-6">
             {/* Logo */}
             <a href={logo.url} className="flex items-center gap-2">
