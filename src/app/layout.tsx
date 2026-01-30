@@ -8,6 +8,7 @@ import { FeaturedTutors } from "@/components/feature17";
 import { HelpCenter } from "@/components/help1";
 import { Logos3 } from "@/components/logos3";
 import FAQ from "./components/sections/faq";
+import { Toaster } from "sonner";
 
 
 
@@ -41,6 +42,7 @@ export default function RootLayout({
         <Navbar1></Navbar1>
         
         {children}
+        <Toaster richColors></Toaster>
 
         <FeaturedTutors></FeaturedTutors>
 

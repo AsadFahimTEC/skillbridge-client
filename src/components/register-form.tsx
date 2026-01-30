@@ -17,24 +17,26 @@ import * as z from "zod";
 import { useRouter } from "next/navigation";
 
 const formSchema = z.object({
+  name: z.string().min(1, "This field is required"),
   password: z.string().min(8, "Minimum length is 8"),
   email: z.email(),
 });
 
 
-export function LoginForm({ ...props }: React.ComponentProps<typeof Card>) {
+export function RegisterForm({ ...props }: React.ComponentProps<typeof Card>) {
   const router = useRouter();
 
   const handleGoogleLogin = async () => {
     const data = authClient.signIn.social({
       provider: "google",
-      callbackURL: "http://localhost:3000/tutors"
+      callbackURL: "http://localhost:3000"
     });
     console.log(data);
   };
 
   const form = useForm({
     defaultValues: {
+      name: "",
       email: "",
       password: "",
     },
@@ -42,18 +44,18 @@ export function LoginForm({ ...props }: React.ComponentProps<typeof Card>) {
       onSubmit: formSchema,
     },
     onSubmit: async ({ value }) => {
-      const toastId = toast.loading("Logging in");
+      const toastId = toast.loading("Creating user");
       try {
-        const { data, error } = await authClient.signIn.email(value);
+        const { data, error } = await authClient.signUp.email(value);
 
         if (error) {
           toast.error(error.message, { id: toastId })
           return;
         }
 
-        toast.success("User Logged in Successfully", { id: toastId });
+        toast.success("User Created Successfully", { id: toastId });
 
-        router.push("/tutors");
+        router.push("/");
         
       } catch (error) {
 
@@ -65,9 +67,9 @@ export function LoginForm({ ...props }: React.ComponentProps<typeof Card>) {
   return (
     <Card {...props}>
       <CardHeader>
-        <CardTitle>Login</CardTitle>
+        <CardTitle>Create an account</CardTitle>
         <CardDescription>
-          Enter your information below Login
+          Enter your information below to create your account
         </CardDescription>
       </CardHeader>
       <CardContent>
@@ -76,6 +78,23 @@ export function LoginForm({ ...props }: React.ComponentProps<typeof Card>) {
           form.handleSubmit();
         }}>
           <FieldGroup>
+            <form.Field name="name" children={(field) => {
+              const isInvalid =
+                field.state.meta.isTouched && !field.state.meta.isValid
+              return (
+                <Field data-invalid={isInvalid}>
+                  <FieldLabel htmlFor={field.name}>Name</FieldLabel>
+                  <Input
+                    type="text"
+                    id={field.name}
+                    name={field.name}
+                    value={field.state.value}
+                    onChange={(e) => field.handleChange(e.target.value)}
+                  />
+                  {isInvalid && <FieldError errors={field.state.meta.errors} />}
+                </Field>
+              );
+            }} />
             <form.Field name="email" children={(field) => {
               const isInvalid =
                 field.state.meta.isTouched && !field.state.meta.isValid
@@ -114,7 +133,7 @@ export function LoginForm({ ...props }: React.ComponentProps<typeof Card>) {
         </form>
       </CardContent>
       <CardFooter className="flex flex-col gap-5 justify-end">
-        <Button className="w-full" form="login-form" type="submit">Login</Button>
+        <Button className="w-full" form="login-form" type="submit">Register</Button>
         <Button className="w-full" onClick={() => handleGoogleLogin()} variant="outline" type="button">
           Continue with Google
         </Button>
