@@ -13,11 +13,11 @@ export default function AdminMenu(){
     
 
     return (
-        <div>
-            <Link href="/admin">Dashboard</Link>
+        <div className="flex gap-4 items-center">
+            <Link href="/">Dashboard</Link>
             <Link href="/admin/users">Users</Link>
             <Link href="/admin/bookings">Bookings</Link>
-            <Link href="/admin/categories">Categories</Link>
+            <Link href="/categories">Categories</Link>
             <Button onClick={handleLogout}>Logout</Button>
         </div>
     );

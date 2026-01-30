@@ -1,7 +1,14 @@
-export default function AdminServicesPage() {
-  return (
-    <div>
-      This is AdminServicesPage
-    </div>
-  );
+import { fetcher } from "./api";
+
+
+export const allUsers = () => {
+  return fetcher("/admin/users");
 }
+
+export const getAdminBookings = () => {
+  return fetcher("/admin/bookings");
+};
+
+export const getAdminCategories = () => {
+  return fetcher("/categories");
+};
