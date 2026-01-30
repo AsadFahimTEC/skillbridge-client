@@ -1,6 +1,7 @@
 export const API_BASE = "http://localhost:5000/api";
 
-export const fetcher = async(url: string, options?: RequestInit) => {
+export const fetcher = async (url: string, options: RequestInit = {}
+) => {
     const res = await fetch(`${API_BASE}${url}`, {
         credentials: "include",
         headers: {
@@ -10,11 +11,13 @@ export const fetcher = async(url: string, options?: RequestInit) => {
         ...options,
     });
 
-    if(!res.ok) {
-    const error = await res.json();
-    throw new Error(error.message || "Something went wrong");
-}
+    const data = await res.json();
 
-return res.json();
+    if (!res.ok) {
+        const error = await res.json();
+        throw new Error(error.message || "Something went wrong");
+    }
+
+    return data;
 }
 

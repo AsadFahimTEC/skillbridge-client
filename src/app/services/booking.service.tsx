@@ -1,10 +1,14 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { fetcher } from "./api";
 
 
-export const getStudentDashboard = () => {
-  return fetcher("/dashboard");
+export const createBooking = (data: any) => {
+  return fetcher("/bookings", {
+    method: "POST",
+    body: JSON.stringify(data),
+  });
 }
 
 export const getStudentBookings = () => {
-  return fetcher("/dashboard/bookings");
+  return fetcher("/bookings");
 };

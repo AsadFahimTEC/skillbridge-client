@@ -1,18 +1,14 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { fetcher } from "./api";
 
-export interface UpdateTutorProfilePayload {
-  bio: string;
-  pricePerHr: number;
-  categoryIds: string[];
-}
+export const getTutors = () => fetcher("/tutors");
 
-export const getTutorDashboard = () => {
-  return fetcher("/tutors");
+export const getTutorDashboard = (id: string) => {
+  return fetcher(`/tutors/${id}`);
 };
 
 export const updateTutorProfile = (
-  data: UpdateTutorProfilePayload
-) => {
+  data: any) => {
   return fetcher("/tutors/profile", {
     method: "PUT",
     headers: {
