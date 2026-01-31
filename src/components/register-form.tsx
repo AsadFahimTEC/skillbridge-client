@@ -44,25 +44,37 @@ export function RegisterForm(props: React.ComponentProps<typeof Card>) {
       name: "",
       email: "",
       password: "",
-      role: "STUDENT",
+      role: "STUDENT" as "STUDENT" | "TUTOR",
     },
     validators: {
       onSubmit: formSchema,
     },
     onSubmit: async ({ value }) => {
       const toastId = toast.loading("Creating account...");
+
       try {
-        const { error } = await authClient.signUp.email({
+        // ✅ 1. Create auth account (NO role here)
+        const { error, data } = await authClient.signUp.email({
           name: value.name,
           email: value.email,
           password: value.password,
-          role: value.role,
         });
 
         if (error) {
           toast.error(error.message, { id: toastId });
           return;
         }
+
+        // ✅ 2. Save role in your backend
+        await fetch("/api/users/role", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            role: value.role,
+          }),
+        });
 
         toast.success("Account created successfully 🎉", { id: toastId });
         router.push("/");
@@ -176,12 +188,8 @@ export function RegisterForm(props: React.ComponentProps<typeof Card>) {
                       )
                     }
                   >
-                    <option value="STUDENT">
-                      🎓 Student (Book tutors)
-                    </option>
-                    <option value="TUTOR">
-                      👨‍🏫 Tutor (Teach students)
-                    </option>
+                    <option value="STUDENT">🎓 Student</option>
+                    <option value="TUTOR">👨‍🏫 Tutor</option>
                   </select>
                 </Field>
               )}

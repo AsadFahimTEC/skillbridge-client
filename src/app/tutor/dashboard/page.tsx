@@ -1,7 +1,12 @@
 import { getTutorDashboard } from "@/app/services/tutor.service";
 
-export default async function TutorDashboardPage() {
-  const res = await getTutorDashboard();
+
+export default async function TutorDashboardPage({
+  params,
+}: {
+  params: { id: string };
+}) {
+  const res = await getTutorDashboard(params.id);
 
   return (
     <div className="p-6">
