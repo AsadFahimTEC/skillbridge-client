@@ -33,6 +33,7 @@ import { useRole } from "@/hooks/useRole";
 import StudentMenu from "@/app/components/navbar/StudentMenu";
 import TutorMenu from "@/app/components/navbar/TutorMenu";
 import AdminMenu from "@/app/components/navbar/AdminMenu";
+import { useSession } from "@/hooks/useSession";
 
 interface MenuItem {
   title: string;
@@ -77,6 +78,7 @@ const Navbar1 = ({
   className,
 }: NavbarProps) => {
   const { isStudent, isTutor, isAdmin } = useRole();
+  const { user, loading } = useSession();
 
   const isLoggedIn = isStudent || isTutor || isAdmin;
 
@@ -140,18 +142,15 @@ const Navbar1 = ({
               </SheetHeader>
 
               <div className="flex flex-col gap-6 p-4">
-                {/* Mobile Menu */}
                 {!isLoggedIn && (
                   <Accordion type="single" collapsible className="flex flex-col gap-4">
                     {menu.map((item) => renderMobileMenuItem(item))}
                   </Accordion>
                 )}
-
                 {isStudent && <StudentMenu />}
                 {isTutor && <TutorMenu />}
                 {isAdmin && <AdminMenu />}
 
-                {/* Auth Buttons */}
                 {!isLoggedIn && (
                   <div className="flex flex-col gap-3">
                     <Button asChild variant="outline">
