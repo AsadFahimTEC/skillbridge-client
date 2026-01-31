@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
-import { Navbar1 } from "@/components/navbar1";
+
 import { Footer2 } from "@/components/footer2";
 import { FeaturedTutors } from "@/components/feature17";
 // import { TutorCard } from "./components/tutors/TutorCard";
@@ -9,6 +9,7 @@ import { HelpCenter } from "@/components/help1";
 import { Logos3 } from "@/components/logos3";
 import FAQ from "./components/sections/faq";
 import { Toaster } from "sonner";
+import Navbar1 from "@/components/navbar1";
 
 
 

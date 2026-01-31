@@ -19,12 +19,8 @@ export default function AdminPage() {
   useEffect(() => {
     const fetchUsers = async () => {
       try {
-        const data = await allUsers();
-        if (Array.isArray(data)) {
-          setUsers(data);
-        } else {
-          setUsers([]);
-        }
+        const data = await allUsers(); // ✅ already an array
+        setUsers(data ?? []);
       } catch (err: any) {
         setError(err.message || "Something went wrong");
       } finally {
@@ -62,33 +58,39 @@ export default function AdminPage() {
   return (
     <div className="container mx-auto px-4 py-6">
       <h1 className="text-2xl font-bold mb-4">All Users</h1>
+
       <div className="overflow-x-auto">
-        <table className="min-w-full border border-gray-200 divide-y divide-gray-200">
-          <thead className="bg-gray-50">
+        <table className="min-w-full border border-gray-200">
+          <thead className="bg-gray-100">
             <tr>
-              <th className="px-4 py-2 text-left text-sm font-medium text-gray-700">ID</th>
-              <th className="px-4 py-2 text-left text-sm font-medium text-gray-700">Name</th>
-              <th className="px-4 py-2 text-left text-sm font-medium text-gray-700">Email</th>
-              <th className="px-4 py-2 text-left text-sm font-medium text-gray-700">Role</th>
-              <th className="px-4 py-2 text-left text-sm font-medium text-gray-700">Created At</th>
+              <th className="px-4 py-2 text-left">ID</th>
+              <th className="px-4 py-2 text-left">Name</th>
+              <th className="px-4 py-2 text-left">Email</th>
+              <th className="px-4 py-2 text-left">Role</th>
+              <th className="px-4 py-2 text-left">Created At</th>
             </tr>
           </thead>
-          <tbody className="bg-white divide-y divide-gray-200">
+
+          <tbody>
             {users.map((user) => (
-              <tr key={user.id}>
-                <td className="px-4 py-2 text-sm text-gray-600">{user.id}</td>
-                <td className="px-4 py-2 text-sm text-gray-600">{user.name}</td>
-                <td className="px-4 py-2 text-sm text-gray-600">{user.email}</td>
+              <tr key={user.id} className="border-t">
+                <td className="px-4 py-2 text-sm">{user.id}</td>
+                <td className="px-4 py-2 text-sm font-medium">
+                  {user.name}
+                </td>
+                <td className="px-4 py-2 text-sm">{user.email}</td>
                 <td className="px-4 py-2 text-sm font-semibold">
                   {user.role === "admin" ? (
-                    <span className="text-blue-600">{user.role}</span>
+                    <span className="text-blue-600">ADMIN</span>
                   ) : user.role === "tutor" ? (
-                    <span className="text-green-600">{user.role}</span>
+                    <span className="text-green-600">TUTOR</span>
                   ) : (
-                    <span className="text-gray-600">{user.role}</span>
+                    <span className="text-gray-600">STUDENT</span>
                   )}
                 </td>
-                <td className="px-4 py-2 text-sm text-gray-500">{new Date(user.createdAt).toLocaleString()}</td>
+                <td className="px-4 py-2 text-sm text-gray-500">
+                  {new Date(user.createdAt).toLocaleString()}
+                </td>
               </tr>
             ))}
           </tbody>

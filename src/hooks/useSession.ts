@@ -1,14 +1,14 @@
 "use client";
 
-import { authClient } from "@/lib/auth-client";
-import { useEffect, useState } from "react";
+import { useState, useEffect } from "react";
 import { UserRole } from "@/constants/roles";
+import { authClient } from "@/lib/auth-client";
 
 export type SessionUser = {
   id: string;
   email: string;
   name?: string;
-  image?: string | null; // ✅ FIXED
+  image?: string | null;
   role?: UserRole;
 };
 
@@ -16,22 +16,47 @@ export const useSession = () => {
   const [user, setUser] = useState<SessionUser | null>(null);
   const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    const loadSession = async () => {
+  const loadSession = async () => {
+    try {
+      setLoading(true);
+
       const res = await authClient.getSession();
 
-      if (res?.data?.user) {
-        // ✅ types now match perfectly
-        setUser(res.data.user);
-      } else {
-        setUser(null);
-      }
-
+      // Only update state if component is still mounted
+      setUser(res?.data?.user ?? null);
+    } catch (error) {
+      console.error("Error loading session:", error);
+      setUser(null);
+    } finally {
       setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    let isMounted = true;
+
+    const fetchSession = async () => {
+      try {
+        const res = await authClient.getSession();
+        if (isMounted) {
+          setUser(res?.data?.user ?? null);
+          setLoading(false);
+        }
+      } catch (error) {
+        if (isMounted) {
+          setUser(null);
+          setLoading(false);
+        }
+        console.error(error);
+      }
     };
 
-    loadSession();
+    fetchSession();
+
+    return () => {
+      isMounted = false; // prevent state update if component unmounted
+    };
   }, []);
 
-  return { user, loading };
+  return { user, loading, refreshSession: loadSession };
 };

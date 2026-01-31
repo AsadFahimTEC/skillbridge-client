@@ -2,16 +2,8 @@
 
 import { Menu } from "lucide-react";
 import { cn } from "@/lib/utils";
-
-import {
-  Accordion,
-  AccordionContent,
-  AccordionItem,
-  AccordionTrigger,
-} from "@/components/ui/accordion";
-
+import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { Button } from "@/components/ui/button";
-
 import {
   NavigationMenu,
   NavigationMenuContent,
@@ -20,16 +12,8 @@ import {
   NavigationMenuList,
   NavigationMenuTrigger,
 } from "@/components/ui/navigation-menu";
+import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
 
-import {
-  Sheet,
-  SheetContent,
-  SheetHeader,
-  SheetTitle,
-  SheetTrigger,
-} from "@/components/ui/sheet";
-
-import { useRole } from "@/hooks/useRole";
 import StudentMenu from "@/app/components/navbar/StudentMenu";
 import TutorMenu from "@/app/components/navbar/TutorMenu";
 import AdminMenu from "@/app/components/navbar/AdminMenu";
@@ -59,7 +43,7 @@ interface NavbarProps {
   };
 }
 
-const Navbar1 = ({
+export default function Navbar1({
   logo = {
     url: "/",
     src: "https://i.ibb.co/5gKqm97r/360-F-1562833067-i-MUS3-W5-R1z355geljjd-FWbg-F7g-Qv-Je0l-removebg-preview.png",
@@ -76,24 +60,40 @@ const Navbar1 = ({
     signup: { title: "Sign up", url: "/register" },
   },
   className,
-}: NavbarProps) => {
-  const { isStudent, isTutor, isAdmin } = useRole();
-  const { user, loading } = useSession();
+}: NavbarProps) {
+  const { user, loading, refreshSession } = useSession();
 
-  const isLoggedIn = isStudent || isTutor || isAdmin;
+  if (loading) return null; // Wait for session to load
+
+  const isLoggedIn = Boolean(user);
+
+  // Render role menus dynamically
+  const renderRoleMenu = () => {
+    if (!user) return null;
+    switch (user.role) {
+      case "STUDENT":
+        return <StudentMenu refreshSession={refreshSession} />;
+      case "TUTOR":
+        return <TutorMenu refreshSession={refreshSession} />;
+      case "ADMIN":
+        return <AdminMenu refreshSession={refreshSession} />;
+      default:
+        return null;
+    }
+  };
 
   return (
     <section className={cn("py-4 bg-white dark:bg-gray-900 shadow-sm", className)}>
       <div className="container mx-auto px-4">
         {/* Desktop Navbar */}
         <nav className="hidden lg:flex items-center justify-between">
-          {/* Left: Logo */}
+          {/* Logo */}
           <a href={logo.url} className="flex items-center gap-2">
             <img src={logo.src} alt={logo.alt} className="max-h-8 dark:invert" />
             <span className="text-lg font-semibold tracking-tighter">{logo.title}</span>
           </a>
 
-          {/* Center: Menu */}
+          {/* Center Menu */}
           <div className="flex items-center gap-6">
             {!isLoggedIn && (
               <NavigationMenu>
@@ -102,12 +102,11 @@ const Navbar1 = ({
                 </NavigationMenuList>
               </NavigationMenu>
             )}
-            {isStudent && <StudentMenu />}
-            {isTutor && <TutorMenu />}
-            {isAdmin && <AdminMenu />}
+
+            {renderRoleMenu()}
           </div>
 
-          {/* Right: Auth Buttons */}
+          {/* Auth Buttons */}
           {!isLoggedIn && (
             <div className="flex gap-2">
               <Button asChild variant="outline" size="sm">
@@ -147,9 +146,8 @@ const Navbar1 = ({
                     {menu.map((item) => renderMobileMenuItem(item))}
                   </Accordion>
                 )}
-                {isStudent && <StudentMenu />}
-                {isTutor && <TutorMenu />}
-                {isAdmin && <AdminMenu />}
+
+                {renderRoleMenu()}
 
                 {!isLoggedIn && (
                   <div className="flex flex-col gap-3">
@@ -168,9 +166,9 @@ const Navbar1 = ({
       </div>
     </section>
   );
-};
+}
 
-// Desktop menu rendering
+// Desktop Menu Helper
 const renderMenuItem = (item: MenuItem) => {
   if (item.items) {
     return (
@@ -179,7 +177,7 @@ const renderMenuItem = (item: MenuItem) => {
         <NavigationMenuContent className="bg-popover text-popover-foreground">
           {item.items.map((subItem) => (
             <NavigationMenuLink asChild key={subItem.title} className="w-80">
-              <SubMenuLink item={subItem} />
+              <a>{subItem.title}</a>
             </NavigationMenuLink>
           ))}
         </NavigationMenuContent>
@@ -189,17 +187,12 @@ const renderMenuItem = (item: MenuItem) => {
 
   return (
     <NavigationMenuItem key={item.title}>
-      <NavigationMenuLink
-        href={item.url}
-        className="group inline-flex h-10 items-center justify-center rounded-md px-4 text-sm font-medium transition hover:bg-muted hover:text-accent-foreground"
-      >
-        {item.title}
-      </NavigationMenuLink>
+      <NavigationMenuLink href={item.url}>{item.title}</NavigationMenuLink>
     </NavigationMenuItem>
   );
 };
 
-// Mobile menu rendering
+// Mobile Menu Helper
 const renderMobileMenuItem = (item: MenuItem) => {
   if (item.items) {
     return (
@@ -207,7 +200,9 @@ const renderMobileMenuItem = (item: MenuItem) => {
         <AccordionTrigger className="text-md py-0 font-semibold">{item.title}</AccordionTrigger>
         <AccordionContent className="mt-2 flex flex-col gap-2">
           {item.items.map((subItem) => (
-            <SubMenuLink key={subItem.title} item={subItem} />
+            <a key={subItem.title} href={subItem.url} className="text-md font-semibold">
+              {subItem.title}
+            </a>
           ))}
         </AccordionContent>
       </AccordionItem>
@@ -220,23 +215,3 @@ const renderMobileMenuItem = (item: MenuItem) => {
     </a>
   );
 };
-
-// Submenu link component
-const SubMenuLink = ({ item }: { item: MenuItem }) => {
-  return (
-    <a
-      className="flex gap-3 rounded-md p-2 transition hover:bg-muted hover:text-accent-foreground"
-      href={item.url}
-    >
-      {item.icon && <div className="text-foreground">{item.icon}</div>}
-      <div>
-        <div className="text-sm font-semibold">{item.title}</div>
-        {item.description && (
-          <p className="text-sm text-muted-foreground">{item.description}</p>
-        )}
-      </div>
-    </a>
-  );
-};
-
-export { Navbar1 };

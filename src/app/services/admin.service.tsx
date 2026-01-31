@@ -1,14 +1,16 @@
 import { fetcher } from "./api";
 
-
-export const allUsers = () => {
-  return fetcher("/admin/users");
-}
-
-export const getAdminBookings = () => {
-  return fetcher("/admin/bookings");
+export const allUsers = async () => {
+  const res = await fetcher("/admin/users");
+  return res.data; // ✅ return only array
 };
 
-export const getAdminCategories = () => {
-  return fetcher("/categories");
+export const getAdminBookings = async () => {
+  const res = await fetcher("/admin/bookings");
+  return res.data; // ✅ return only array
+};
+
+export const getAdminCategories = async () => {
+  const res = await fetcher("/categories");
+  return res.data;
 };
