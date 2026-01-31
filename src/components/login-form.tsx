@@ -26,9 +26,12 @@ export function LoginForm({ ...props }: React.ComponentProps<typeof Card>) {
   const router = useRouter();
 
   const handleGoogleLogin = async () => {
+
+    const callbackURL = `${process.env.FRONTEND_URL || "http://localhost:3000"}/tutors`;
+
     const data = authClient.signIn.social({
       provider: "google",
-      callbackURL: "http://localhost:3000/tutors"
+      callbackURL
     });
     console.log(data);
   };
