@@ -19,7 +19,7 @@ export default function AdminMenu({ refreshSession }: MenuProps) {
       <Link href="/">Dashboard</Link>
       <Link href="/admin/users">Users</Link>
       <Link href="/admin/bookings">Bookings</Link>
-      <Link href="/categories">Categories</Link>
+      <Link href="/categories/admin">Categories</Link>
       <Button onClick={handleLogout}>Logout</Button>
     </div>
   );
