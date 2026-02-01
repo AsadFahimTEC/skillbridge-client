@@ -17,9 +17,9 @@ export default function StudentMenu({ refreshSession }: MenuProps) {
   return (
     <div className="flex gap-4 items-center">
       <Link href="/tutors">Tutors</Link>
-      <Link href="/dashboard">Dashboard</Link>
-      <Link href="/bookings">My Bookings</Link>
-      <Link href="/profile">Profile</Link>
+      <Link href="/bookings">Dashboard</Link>
+      <Link href="/sessions">Book Session</Link>
+      <Link href="/reviews">Review</Link>
       <Button onClick={handleLogout}>Logout</Button>
     </div>
   );

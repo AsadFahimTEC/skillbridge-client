@@ -11,5 +11,16 @@ export const createBooking = async (data: any) => {
 
 export const getStudentBookings = async () => {
   const res = await fetcher("/bookings");
-  return res.data; // ✅ return array only
+  return res.data;
 };
+
+// ✅ Tutor cancels booking
+export const cancelBooking = async (bookingId: string) => {
+  const res = await fetcher(`/bookings/${bookingId}`, {
+    method: "PATCH",
+    body: JSON.stringify({ status: "cancelled" }),
+  });
+
+  return res.data;
+};
+
