@@ -10,7 +10,8 @@ export const getAdminBookings = async () => {
   return res.data; // ✅ return only array
 };
 
+// Get all categories
 export const getAdminCategories = async () => {
   const res = await fetcher("/categories");
-  return res.data;
+  return res.data ?? []; // ensure array
 };
