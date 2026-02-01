@@ -10,6 +10,26 @@ export const getTutors = async () => {
   return res.data;
 };
 
+
+/**
+ * Search tutors with filters
+ * GET /tutors?price=&rating=&category=&search=
+ */
+export const searchTutors = async (params: {
+  price?: string;
+  rating?: string;
+  category?: string;
+  search?: string;
+}) => {
+  const query = new URLSearchParams(
+    Object.entries(params).filter(([_, v]) => v && v !== "")
+  ).toString();
+
+  const res = await fetcher(`/tutors?${query}`);
+  return res.data;
+};
+
+
 /**
  * Get tutor dashboard data
  * GET /tutors/:id
