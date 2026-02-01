@@ -12,6 +12,6 @@ export const getAdminBookings = async () => {
 
 // Get all categories
 export const getAdminCategories = async () => {
-  const res = await fetcher("/categories/admin");
+  const res = await fetcher("/admin/categories");
   return res.data ?? []; // ensure array
 };
