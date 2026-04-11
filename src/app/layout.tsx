@@ -11,6 +11,7 @@ import FAQ from "./components/sections/faq";
 import { Toaster } from "sonner";
 import Navbar1 from "@/components/navbar1";
 import FeaturedTutorsUltra from "@/components/feature17";
+import UltraAttractivePage from "./allDetails/page";
 
 
 
@@ -55,6 +56,7 @@ export default function RootLayout({
         <FAQ></FAQ>
 
         <HelpCenterPro></HelpCenterPro>
+        <UltraAttractivePage></UltraAttractivePage>
 
         <Footer2></Footer2>
       </body>

@@ -114,7 +114,7 @@ export default function NavbarUltra() {
                 <Button
                   asChild
                   variant="outline"
-                  className="border-cyan-400 text-cyan-400 hover:bg-cyan-400 hover:text-black transition-all shadow-[0_0_15px_cyan] hover:shadow-[0_0_25px_cyan] hover:scale-105 duration-300"
+                  className="border-cyan-400 text-cyan-400 hover:bg-cyan-400 hover:text-black transition-all shadow-[0_0_15px_cyan] hover:shadow-[0_0_25px_cyan] hover:scale-105 duration-300 text-black font-bold"
                 >
                   <Link href="/login">Login</Link>
                 </Button>
