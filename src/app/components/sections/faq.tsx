@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { ChevronDown, ChevronUp } from "lucide-react";
+import { ChevronDown } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { cn } from "@/lib/utils";
 
@@ -21,27 +21,27 @@ const DEFAULT_FAQS: FAQItem[] = [
   {
     question: "How do I book a tutor session?",
     answer:
-      "Search for a tutor, choose a time slot, and confirm your booking with secure payment.",
+      "Search for a tutor, select your preferred time slot, and confirm securely through our payment system.",
   },
   {
     question: "Can I reschedule or cancel a session?",
     answer:
-      "Yes! You can manage sessions from your dashboard based on our policy.",
+      "Yes! You can manage your bookings from the dashboard based on our cancellation policy.",
   },
   {
     question: "What payment methods are supported?",
     answer:
-      "We support cards and modern secure online payment gateways.",
+      "We support cards, secure payment gateways, and modern online banking methods.",
   },
   {
     question: "Are the tutors verified?",
     answer:
-      "Yes, all tutors go through strict verification before being listed.",
+      "Yes. Every tutor goes through strict verification before being listed.",
   },
   {
     question: "How do I become a tutor?",
     answer:
-      "Apply via 'Become a Tutor' section. Our team will review your profile.",
+      "Apply through the 'Become a Tutor' section and our team will review your profile.",
   },
 ];
 
@@ -51,9 +51,12 @@ export default function FAQ({
   faqs = DEFAULT_FAQS,
   className,
 }: FAQProps) {
+  // 🔥 All answers hidden by default
   const [openIndex, setOpenIndex] = useState<number | null>(null);
 
   const toggle = (index: number) => {
+    // If same clicked → close it
+    // If different clicked → open new one
     setOpenIndex(openIndex === index ? null : index);
   };
 
@@ -64,47 +67,40 @@ export default function FAQ({
         className
       )}
     >
-      {/* 🌌 BACKGROUND GLOW */}
-      <div className="absolute inset-0 -z-10">
-        <div className="absolute w-[400px] h-[400px] bg-purple-500/20 blur-3xl rounded-full top-[-100px] left-[-100px] animate-pulse" />
-        <div className="absolute w-[400px] h-[400px] bg-cyan-500/20 blur-3xl rounded-full bottom-[-100px] right-[-100px] animate-pulse" />
-      </div>
-
       <div className="container mx-auto px-4 max-w-4xl">
-        {/* 🔥 HEADER */}
+
+        {/* Header */}
         <motion.div
           initial={{ opacity: 0, y: 40 }}
           whileInView={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6 }}
+          viewport={{ once: true }}
           className="text-center mb-14"
         >
-          <h2 className="text-3xl md:text-5xl font-extrabold bg-gradient-to-r from-cyan-400 via-pink-500 to-purple-500 bg-clip-text text-transparent">
+          <h2 className="text-3xl md:text-5xl font-bold bg-gradient-to-r from-cyan-400 via-pink-500 to-purple-500 bg-clip-text text-transparent">
             {title}
           </h2>
           <p className="mt-4 text-gray-400 text-lg">{description}</p>
         </motion.div>
 
-        {/* FAQ ITEMS */}
+        {/* FAQ List */}
         <div className="space-y-6">
           {faqs.map((faq, idx) => {
             const isOpen = openIndex === idx;
 
             return (
-              <motion.div
-                key={idx}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                transition={{ delay: idx * 0.1 }}
-                className="relative group rounded-xl p-[1px]"
-              >
-                {/* 💡 LED BORDER */}
-                <div className="absolute inset-0 bg-gradient-to-r from-cyan-400 via-pink-500 to-purple-500 rounded-xl blur opacity-0 group-hover:opacity-100 transition duration-300"></div>
+              <div key={idx} className="relative group rounded-xl p-[1px]">
 
-                {/* ✨ CARD */}
-                <div className="relative bg-white/5 backdrop-blur-xl border border-white/10 rounded-xl p-5">
-                  {/* QUESTION */}
+                {/* LED Border Glow */}
+                <div className="absolute inset-0 rounded-xl bg-gradient-to-r from-cyan-400 via-pink-500 to-purple-500 opacity-0 group-hover:opacity-100 blur-lg transition duration-300" />
+
+                {/* Card */}
+                <div className="relative bg-white/5 backdrop-blur-xl border border-white/10 rounded-xl p-6">
+
+                  {/* Question Button */}
                   <button
                     onClick={() => toggle(idx)}
+                    aria-expanded={isOpen}
                     className="flex w-full items-center justify-between text-left"
                   >
                     <span className="font-semibold text-lg">
@@ -115,22 +111,19 @@ export default function FAQ({
                       animate={{ rotate: isOpen ? 180 : 0 }}
                       transition={{ duration: 0.3 }}
                     >
-                      {isOpen ? (
-                        <ChevronUp className="text-cyan-400" />
-                      ) : (
-                        <ChevronDown className="text-cyan-400" />
-                      )}
+                      <ChevronDown className="text-cyan-400" />
                     </motion.div>
                   </button>
 
-                  {/* ANSWER */}
-                  <AnimatePresence>
+                  {/* Animated Answer */}
+                  <AnimatePresence initial={false}>
                     {isOpen && (
                       <motion.div
-                        initial={{ height: 0, opacity: 0 }}
-                        animate={{ height: "auto", opacity: 1 }}
-                        exit={{ height: 0, opacity: 0 }}
+                        initial={{ opacity: 0, height: 0 }}
+                        animate={{ opacity: 1, height: "auto" }}
+                        exit={{ opacity: 0, height: 0 }}
                         transition={{ duration: 0.4 }}
+                        className="overflow-hidden"
                       >
                         <p className="mt-4 text-gray-300 leading-relaxed">
                           {faq.answer}
@@ -139,10 +132,8 @@ export default function FAQ({
                     )}
                   </AnimatePresence>
 
-                  {/* ✨ HOVER GLOW */}
-                  <div className="absolute inset-0 rounded-xl opacity-0 group-hover:opacity-100 bg-white/5 blur-xl transition"></div>
                 </div>
-              </motion.div>
+              </div>
             );
           })}
         </div>
