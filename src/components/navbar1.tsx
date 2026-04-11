@@ -1,217 +1,194 @@
 "use client";
 
 import { Menu } from "lucide-react";
+import Link from "next/link";
+import { motion } from "framer-motion";
 import { cn } from "@/lib/utils";
-import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
-import { Button } from "@/components/ui/button";
+
 import {
   NavigationMenu,
-  NavigationMenuContent,
   NavigationMenuItem,
   NavigationMenuLink,
   NavigationMenuList,
-  NavigationMenuTrigger,
 } from "@/components/ui/navigation-menu";
-import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
 
+import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
+import { Button } from "@/components/ui/button";
+
+import { useSession } from "@/hooks/useSession";
 import StudentMenu from "@/app/components/navbar/StudentMenu";
 import TutorMenu from "@/app/components/navbar/TutorMenu";
 import AdminMenu from "@/app/components/navbar/AdminMenu";
-import { useSession } from "@/hooks/useSession";
 
-interface MenuItem {
-  title: string;
-  url: string;
-  description?: string;
-  icon?: React.ReactNode;
-  items?: MenuItem[];
-}
-
-interface NavbarProps {
-  className?: string;
-  logo?: {
-    url: string;
-    src: string;
-    alt: string;
-    title: string;
-    className?: string;
-  };
-  menu?: MenuItem[];
-  auth?: {
-    login: { title: string; url: string };
-    signup: { title: string; url: string };
-  };
-}
-
-export default function Navbar1({
-  logo = {
-    url: "/",
-    src: "https://i.ibb.co/5gKqm97r/360-F-1562833067-i-MUS3-W5-R1z355geljjd-FWbg-F7g-Qv-Je0l-removebg-preview.png",
-    alt: "logo",
-    title: "SkillBridge 🎓",
-  },
-  menu = [
-    { title: "Home", url: "/" },
-    { title: "Tutors", url: "/tutors" },
-    { title: "Profile", url: "/profile" },
-  ],
-  auth = {
-    login: { title: "Login", url: "/login" },
-    signup: { title: "Sign up", url: "/register" },
-  },
-  className,
-}: NavbarProps) {
+export default function NavbarUltra() {
   const { user, loading, refreshSession } = useSession();
 
-  if (loading) return null; // Wait for session to load
+  if (loading) return null;
 
   const isLoggedIn = Boolean(user);
 
-  // Render role menus dynamically
+  const menu = [
+    { title: "Home", url: "/" },
+    { title: "Tutors", url: "/tutors" },
+    { title: "Events", url: "/events" },
+    { title: "Profile", url: "/profile" },
+  ];
+
   const renderRoleMenu = () => {
     if (!user) return null;
-    switch (user.role) {
-      case "STUDENT":
-        return <StudentMenu refreshSession={refreshSession} />;
-      case "TUTOR":
-        return <TutorMenu refreshSession={refreshSession} />;
-      case "ADMIN":
-        return <AdminMenu refreshSession={refreshSession} />;
-      default:
-        return null;
-    }
+    if (user.role === "STUDENT") return <StudentMenu refreshSession={refreshSession} />;
+    if (user.role === "TUTOR") return <TutorMenu refreshSession={refreshSession} />;
+    if (user.role === "ADMIN") return <AdminMenu refreshSession={refreshSession} />;
   };
 
   return (
-    <section className={cn("py-4 bg-white dark:bg-gray-900 shadow-sm", className)}>
-      <div className="container mx-auto px-4">
-        {/* Desktop Navbar */}
-        <nav className="hidden lg:flex items-center justify-between">
-          {/* Logo */}
-          <a href={logo.url} className="flex items-center gap-2">
-            <img src={logo.src} alt={logo.alt} className="max-h-8 dark:invert" />
-            <span className="text-lg font-semibold tracking-tighter">{logo.title}</span>
-          </a>
+    <section className="relative z-50">
 
-          {/* Center Menu */}
-          <div className="flex items-center gap-6">
-            {!isLoggedIn && (
-              <NavigationMenu>
-                <NavigationMenuList>
-                  {menu.map((item) => renderMenuItem(item))}
-                </NavigationMenuList>
-              </NavigationMenu>
-            )}
+      {/* 🌌 FLOATING BACKGROUND BLOBS */}
+      <div className="absolute inset-0 overflow-hidden -z-10">
+        <div className="absolute w-[400px] h-[400px] bg-cyan-500/20 blur-3xl rounded-full top-[-100px] left-[-100px] animate-pulse" />
+        <div className="absolute w-[400px] h-[400px] bg-pink-500/20 blur-3xl rounded-full bottom-[-100px] right-[-100px] animate-pulse" />
+      </div>
 
-            {renderRoleMenu()}
-          </div>
+      {/* 🔥 NAVBAR CONTAINER */}
+      <div className="relative backdrop-blur-xl bg-black/60 border-b border-white/10 shadow-[0_0_30px_rgba(0,255,255,0.2)]">
 
-          {/* Auth Buttons */}
-          {!isLoggedIn && (
-            <div className="flex gap-2">
-              <Button asChild variant="outline" size="sm">
-                <a href={auth.login.url}>{auth.login.title}</a>
-              </Button>
-              <Button asChild size="sm">
-                <a href={auth.signup.url}>{auth.signup.title}</a>
-              </Button>
-            </div>
-          )}
-        </nav>
+        {/* 💡 LED RUNNING BORDER */}
+        <div className="absolute inset-0 rounded-b-xl pointer-events-none">
+          <div className="w-full h-[2px] bg-gradient-to-r from-cyan-400 via-pink-500 to-purple-500 animate-[move_3s_linear_infinite]" />
+        </div>
 
-        {/* Mobile Navbar */}
-        <div className="flex items-center justify-between lg:hidden">
-          <a href={logo.url} className="flex items-center gap-2">
-            <img src={logo.src} alt={logo.alt} className="max-h-8 dark:invert" />
-          </a>
+        <div className="container mx-auto px-4 py-4">
 
-          <Sheet>
-            <SheetTrigger asChild>
-              <Button variant="outline" size="icon">
-                <Menu className="h-5 w-5" />
-              </Button>
-            </SheetTrigger>
-            <SheetContent side="right" className="w-72 sm:w-80">
-              <SheetHeader>
-                <SheetTitle>
-                  <a href={logo.url} className="flex items-center gap-2">
-                    <img src={logo.src} alt={logo.alt} className="max-h-8 dark:invert" />
-                  </a>
-                </SheetTitle>
-              </SheetHeader>
+          {/* ---------------- DESKTOP ---------------- */}
+          <nav className="hidden lg:flex justify-between items-center">
 
-              <div className="flex flex-col gap-6 p-4">
-                {!isLoggedIn && (
-                  <Accordion type="single" collapsible className="flex flex-col gap-4">
-                    {menu.map((item) => renderMobileMenuItem(item))}
-                  </Accordion>
-                )}
+            {/* 🔥 LOGO */}
+            <motion.div
+              initial={{ opacity: 0, y: -30 }}
+              animate={{ opacity: 1, y: 0 }}
+              className="text-2xl font-extrabold tracking-widest"
+            >
+              <Link href="/">
+                <span className="bg-gradient-to-r from-cyan-400 via-pink-500 to-purple-500 bg-clip-text text-transparent drop-shadow-[0_0_20px_rgba(255,0,255,0.6)]">
+                  SkillBridge
+                </span>
+              </Link>
+            </motion.div>
+
+            {/* 🔥 MENU */}
+            <NavigationMenu>
+              <NavigationMenuList className="flex gap-8">
+                {!isLoggedIn &&
+                  menu.map((item) => (
+                    <NavigationMenuItem key={item.title}>
+                      <NavigationMenuLink asChild>
+                        <Link
+                          href={item.url}
+                          className="relative text-white text-lg group transition"
+                        >
+                          {item.title}
+
+                          {/* 💡 Neon underline */}
+                          <span className="absolute left-0 -bottom-1 h-[2px] w-0 bg-gradient-to-r from-cyan-400 to-pink-500 group-hover:w-full transition-all duration-300 shadow-[0_0_10px_cyan]" />
+                        </Link>
+                      </NavigationMenuLink>
+                    </NavigationMenuItem>
+                  ))}
 
                 {renderRoleMenu()}
+              </NavigationMenuList>
+            </NavigationMenu>
 
-                {!isLoggedIn && (
-                  <div className="flex flex-col gap-3">
-                    <Button asChild variant="outline">
-                      <a href={auth.login.url}>{auth.login.title}</a>
-                    </Button>
-                    <Button asChild>
-                      <a href={auth.signup.url}>{auth.signup.title}</a>
-                    </Button>
-                  </div>
-                )}
+            {/* 🔐 AUTH */}
+            {!isLoggedIn && (
+              <div className="flex gap-4">
+
+                {/* Login */}
+                <Button
+                  asChild
+                  variant="outline"
+                  className="border-cyan-400 text-cyan-400 hover:bg-cyan-400 hover:text-black transition shadow-[0_0_10px_cyan]"
+                >
+                  <Link href="/login">Login</Link>
+                </Button>
+
+                {/* Sign Up */}
+                <Button
+                  asChild
+                  className="relative overflow-hidden text-black font-bold bg-gradient-to-r from-cyan-400 via-pink-500 to-purple-500 shadow-[0_0_25px_rgba(255,0,255,0.7)] hover:scale-105 transition"
+                >
+                  <Link href="/register">
+                    <span className="relative z-10">Sign Up</span>
+
+                    {/* ✨ Shine effect */}
+                    <span className="absolute inset-0 bg-white/20 opacity-0 hover:opacity-100 transition duration-500 blur-xl" />
+                  </Link>
+                </Button>
               </div>
-            </SheetContent>
-          </Sheet>
+            )}
+          </nav>
+
+          {/* ---------------- MOBILE ---------------- */}
+          <div className="flex justify-between items-center lg:hidden">
+
+            <span className="text-xl font-bold bg-gradient-to-r from-cyan-400 via-pink-500 to-purple-500 bg-clip-text text-transparent">
+              SkillBridge
+            </span>
+
+            <Sheet>
+              <SheetTrigger asChild>
+                <Button size="icon" variant="outline">
+                  <Menu />
+                </Button>
+              </SheetTrigger>
+
+              <SheetContent className="bg-black text-white border-l border-white/10">
+
+                <div className="flex flex-col gap-6 mt-8">
+
+                  {!isLoggedIn &&
+                    menu.map((item) => (
+                      <Link
+                        key={item.title}
+                        href={item.url}
+                        className="text-lg hover:text-cyan-400 transition"
+                      >
+                        {item.title}
+                      </Link>
+                    ))}
+
+                  {renderRoleMenu()}
+
+                  {!isLoggedIn && (
+                    <>
+                      <Link href="/login">
+                        <Button variant="outline" className="w-full">
+                          Login
+                        </Button>
+                      </Link>
+
+                      <Link href="/register">
+                        <Button className="w-full bg-gradient-to-r from-cyan-400 via-pink-500 to-purple-500 text-black">
+                          Sign Up
+                        </Button>
+                      </Link>
+                    </>
+                  )}
+                </div>
+              </SheetContent>
+            </Sheet>
+          </div>
         </div>
       </div>
+
+      {/* 🎬 KEYFRAMES */}
+      <style jsx>{`
+        @keyframes move {
+          0% { transform: translateX(-100%); }
+          100% { transform: translateX(100%); }
+        }
+      `}</style>
     </section>
   );
 }
-
-// Desktop Menu Helper
-const renderMenuItem = (item: MenuItem) => {
-  if (item.items) {
-    return (
-      <NavigationMenuItem key={item.title}>
-        <NavigationMenuTrigger>{item.title}</NavigationMenuTrigger>
-        <NavigationMenuContent className="bg-popover text-popover-foreground">
-          {item.items.map((subItem) => (
-            <NavigationMenuLink asChild key={subItem.title} className="w-80">
-              <a>{subItem.title}</a>
-            </NavigationMenuLink>
-          ))}
-        </NavigationMenuContent>
-      </NavigationMenuItem>
-    );
-  }
-
-  return (
-    <NavigationMenuItem key={item.title}>
-      <NavigationMenuLink href={item.url}>{item.title}</NavigationMenuLink>
-    </NavigationMenuItem>
-  );
-};
-
-// Mobile Menu Helper
-const renderMobileMenuItem = (item: MenuItem) => {
-  if (item.items) {
-    return (
-      <AccordionItem key={item.title} value={item.title} className="border-b-0">
-        <AccordionTrigger className="text-md py-0 font-semibold">{item.title}</AccordionTrigger>
-        <AccordionContent className="mt-2 flex flex-col gap-2">
-          {item.items.map((subItem) => (
-            <a key={subItem.title} href={subItem.url} className="text-md font-semibold">
-              {subItem.title}
-            </a>
-          ))}
-        </AccordionContent>
-      </AccordionItem>
-    );
-  }
-
-  return (
-    <a key={item.title} href={item.url} className="text-md font-semibold">
-      {item.title}
-    </a>
-  );
-};

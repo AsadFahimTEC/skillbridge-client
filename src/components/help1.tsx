@@ -1,187 +1,139 @@
 "use client";
 
-import {
-  ChevronRight,
-  CreditCard,
-  HelpCircle,
-  Package,
-  RotateCcw,
-  Search,
-  ShoppingBag,
-  Truck,
-  User,
-} from "lucide-react";
 import { useState } from "react";
+import { motion } from "framer-motion";
+import { Send, Bot, User, Sparkles } from "lucide-react";
 
-import { cn } from "@/lib/utils";
-
-import { Button } from "@/components/ui/button";
-import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
 
-interface HelpCategory {
-  icon: React.ReactNode;
-  title: string;
-  description: string;
-  articles: number;
-}
+// ------------------ MOCK AI RESPONSE ------------------
+const getAIResponse = (message: string) => {
+  const msg = message.toLowerCase();
 
-interface PopularTopic {
-  title: string;
-  href: string;
-}
+  if (msg.includes("book")) {
+    return "You can book a tutor by visiting the Tutors page and selecting your preferred schedule.";
+  }
+  if (msg.includes("payment")) {
+    return "We support secure online payments including cards and mobile banking.";
+  }
+  if (msg.includes("refund")) {
+    return "Refunds depend on cancellation timing. Please check our refund policy.";
+  }
 
-interface HelpCenterProps {
-  title?: string;
-  subtitle?: string;
-  categories?: HelpCategory[];
-  popularTopics?: PopularTopic[];
-  className?: string;
-}
+  return "I'm here to help! Please provide more details so I can assist you better 😊";
+};
 
-const DEFAULT_CATEGORIES: HelpCategory[] = [
-  {
-    icon: <Package className="size-6" />,
-    title: "Bookings & Sessions",
-    description: "Manage, reschedule, or cancel your sessions",
-    articles: 12,
-  },
-  {
-    icon: <Truck className="size-6" />,
-    title: "Live Classes",
-    description: "Join classes, schedules, and technical setup",
-    articles: 8,
-  },
-  {
-    icon: <RotateCcw className="size-6" />,
-    title: "Refunds & Cancellations",
-    description: "Refund policy and cancellation rules",
-    articles: 15,
-  },
-  {
-    icon: <CreditCard className="size-6" />,
-    title: "Payments & Billing",
-    description: "Payment methods and billing issues",
-    articles: 10,
-  },
-  {
-    icon: <User className="size-6" />,
-    title: "Account Settings",
-    description: "Profile, password, and security",
-    articles: 7,
-  },
-  {
-    icon: <ShoppingBag className="size-6" />,
-    title: "Tutors & Skills",
-    description: "Finding tutors and choosing skills",
-    articles: 9,
-  },
-];
+// ------------------ COMPONENT ------------------
+export default function AIHelpCenter() {
+  const [messages, setMessages] = useState([
+    {
+      role: "ai",
+      text: "Hi 👋 I'm your AI assistant. How can I help you today?",
+    },
+  ]);
 
-const DEFAULT_TOPICS: PopularTopic[] = [
-  { title: "How to book a tutor?", href: "#" },
-  { title: "Cancel or reschedule a session", href: "#" },
-  { title: "Payment failed, what to do?", href: "#" },
-  { title: "Reset my password", href: "#" },
-  { title: "Refund eligibility", href: "#" },
-  { title: "Become a tutor", href: "#" },
-];
+  const [input, setInput] = useState("");
+  const [loading, setLoading] = useState(false);
 
-const HelpCenter = ({
-  title = "Help Center",
-  subtitle = "Find answers to common questions and get support when you need it.",
-  categories = DEFAULT_CATEGORIES,
-  popularTopics = DEFAULT_TOPICS,
-  className,
-}: HelpCenterProps) => {
-  const [searchQuery, setSearchQuery] = useState("");
+  const sendMessage = async () => {
+    if (!input.trim()) return;
+
+    const userMessage = { role: "user", text: input };
+
+    setMessages((prev) => [...prev, userMessage]);
+    setInput("");
+    setLoading(true);
+
+    setTimeout(() => {
+      const aiResponse = {
+        role: "ai",
+        text: getAIResponse(input),
+      };
+
+      setMessages((prev) => [...prev, aiResponse]);
+      setLoading(false);
+    }, 800);
+  };
 
   return (
-    <section className={cn("py-16 sm:py-20 lg:py-24", className)}>
-      <div className="container mx-auto max-w-5xl px-4">
-        {/* Header */}
-        <div className="mb-12 text-center">
-          <h1 className="text-3xl font-bold tracking-tight sm:text-4xl">
-            {title}
-          </h1>
-          <p className="mt-2 text-base text-muted-foreground sm:text-lg">
-            {subtitle}
-          </p>
+    <section className="min-h-screen bg-black text-white flex flex-col">
 
-          {/* Search */}
-          <div className="mx-auto mt-6 max-w-lg">
-            <div className="relative">
-              <Search className="absolute left-4 top-1/2 size-5 -translate-y-1/2 text-muted-foreground" />
-              <Input
-                placeholder="Search help articles..."
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                className="h-12 pl-12 text-base"
-              />
-            </div>
-          </div>
-        </div>
+      {/* 🌌 BACKGROUND */}
+      <div className="absolute inset-0 -z-10">
+        <div className="absolute w-[400px] h-[400px] bg-purple-500/20 blur-3xl rounded-full top-[-100px] left-[-100px]" />
+        <div className="absolute w-[400px] h-[400px] bg-cyan-500/20 blur-3xl rounded-full bottom-[-100px] right-[-100px]" />
+      </div>
 
-        {/* Categories */}
-        <div className="mb-12 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-          {categories.map((category, index) => (
-            <Card
-              key={index}
-              className="group cursor-pointer transition hover:shadow-md"
+      {/* HEADER */}
+      <div className="text-center py-8">
+        <h1 className="text-4xl font-extrabold bg-gradient-to-r from-cyan-400 via-pink-500 to-purple-500 bg-clip-text text-transparent">
+          AI Help Center 🤖
+        </h1>
+        <p className="text-gray-400 mt-2">
+          Ask anything. Get instant AI answers.
+        </p>
+      </div>
+
+      {/* CHAT AREA */}
+      <div className="flex-1 overflow-y-auto px-4 max-w-3xl mx-auto w-full space-y-4 pb-24">
+
+        {messages.map((msg, i) => (
+          <motion.div
+            key={i}
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            className={`flex ${
+              msg.role === "user" ? "justify-end" : "justify-start"
+            }`}
+          >
+            <div
+              className={`flex items-start gap-3 max-w-[80%] p-4 rounded-xl backdrop-blur-xl ${
+                msg.role === "user"
+                  ? "bg-gradient-to-r from-cyan-500 to-purple-500 text-black"
+                  : "bg-white/5 border border-white/10"
+              }`}
             >
-              <CardContent className="p-5">
-                <div className="flex items-start gap-4">
-                  <div className="flex size-12 shrink-0 items-center justify-center rounded-lg bg-primary/10 text-primary">
-                    {category.icon}
-                  </div>
-                  <div className="flex-1">
-                    <div className="flex items-center justify-between">
-                      <h3 className="font-semibold">{category.title}</h3>
-                      <ChevronRight className="size-4 text-muted-foreground transition-transform group-hover:translate-x-0.5" />
-                    </div>
-                    <p className="mt-1 text-sm text-muted-foreground">
-                      {category.description}
-                    </p>
-                    <p className="mt-2 text-xs text-muted-foreground">
-                      {category.articles} articles
-                    </p>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
-          ))}
-        </div>
+              {msg.role === "ai" ? (
+                <Bot className="text-cyan-400 mt-1" />
+              ) : (
+                <User className="text-black mt-1" />
+              )}
 
-        {/* Popular Topics */}
-        <div className="rounded-lg border bg-muted/30 p-6">
-          <h2 className="mb-4 flex items-center gap-2 font-semibold">
-            <HelpCircle className="size-5" />
-            Popular Topics
-          </h2>
-          <div className="grid gap-2 sm:grid-cols-2 lg:grid-cols-3">
-            {popularTopics.map((topic, index) => (
-              <a
-                key={index}
-                href={topic.href}
-                className="flex items-center gap-2 rounded-md p-2 text-sm transition-colors hover:bg-background"
-              >
-                <ChevronRight className="size-4 text-muted-foreground" />
-                {topic.title}
-              </a>
-            ))}
+              <p className="text-sm">{msg.text}</p>
+            </div>
+          </motion.div>
+        ))}
+
+        {/* Typing Indicator */}
+        {loading && (
+          <div className="flex gap-2 items-center text-gray-400">
+            <Sparkles className="animate-pulse" />
+            AI is typing...
           </div>
-        </div>
+        )}
+      </div>
 
-        {/* CTA */}
-        <div className="mt-8 text-center">
-          <p className="text-muted-foreground">
-            Still need help?
-          </p>
-          <Button className="mt-3">Contact Support</Button>
+      {/* INPUT */}
+      <div className="fixed bottom-0 left-0 w-full bg-black/80 backdrop-blur-xl border-t border-white/10 p-4">
+        <div className="max-w-3xl mx-auto flex gap-2">
+
+          <Input
+            value={input}
+            onChange={(e) => setInput(e.target.value)}
+            placeholder="Ask anything..."
+            className="bg-white/5 border border-white/10 text-white"
+            onKeyDown={(e) => e.key === "Enter" && sendMessage()}
+          />
+
+          <Button
+            onClick={sendMessage}
+            className="bg-gradient-to-r from-cyan-400 to-purple-500 text-black"
+          >
+            <Send size={18} />
+          </Button>
         </div>
       </div>
     </section>
   );
-};
-
-export { HelpCenter };
+}

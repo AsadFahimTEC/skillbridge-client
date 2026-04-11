@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { ChevronDown, ChevronUp } from "lucide-react";
+import { motion, AnimatePresence } from "framer-motion";
 import { cn } from "@/lib/utils";
 
 interface FAQItem {
@@ -20,33 +21,33 @@ const DEFAULT_FAQS: FAQItem[] = [
   {
     question: "How do I book a tutor session?",
     answer:
-      "To book a session, search for a tutor in your desired skill area, select a time slot that works for you, and confirm your booking with your payment method.",
+      "Search for a tutor, choose a time slot, and confirm your booking with secure payment.",
   },
   {
     question: "Can I reschedule or cancel a session?",
     answer:
-      "Yes! Visit 'My Sessions' and choose the session you want to modify. You may reschedule or cancel based on our policy.",
+      "Yes! You can manage sessions from your dashboard based on our policy.",
   },
   {
     question: "What payment methods are supported?",
     answer:
-      "We accept major credit/debit cards and secure online payments through modern payment gateways.",
+      "We support cards and modern secure online payment gateways.",
   },
   {
     question: "Are the tutors verified?",
     answer:
-      "Yes, all tutors are vetted for expertise and credibility in their respective fields before they are listed on our platform.",
+      "Yes, all tutors go through strict verification before being listed.",
   },
   {
     question: "How do I become a tutor?",
     answer:
-      "You can apply to be a tutor by visiting the 'Become a Tutor' section and completing the application form. Our team will review and notify you shortly.",
+      "Apply via 'Become a Tutor' section. Our team will review your profile.",
   },
 ];
 
 export default function FAQ({
   title = "Frequently Asked Questions",
-  description = "Find answers to the most commonly asked questions about SkillBridge, bookings, payments, and more.",
+  description = "Everything you need to know about SkillBridge platform.",
   faqs = DEFAULT_FAQS,
   className,
 }: FAQProps) {
@@ -57,44 +58,93 @@ export default function FAQ({
   };
 
   return (
-    <section className={cn("py-16 sm:py-20 lg:py-24", className)}>
-      <div className="container mx-auto px-4">
-        {/* Heading */}
-        <div className="mb-10 text-center">
-          <h2 className="text-3xl font-bold sm:text-4xl lg:text-5xl">
+    <section
+      className={cn(
+        "relative py-20 bg-black text-white overflow-hidden",
+        className
+      )}
+    >
+      {/* 🌌 BACKGROUND GLOW */}
+      <div className="absolute inset-0 -z-10">
+        <div className="absolute w-[400px] h-[400px] bg-purple-500/20 blur-3xl rounded-full top-[-100px] left-[-100px] animate-pulse" />
+        <div className="absolute w-[400px] h-[400px] bg-cyan-500/20 blur-3xl rounded-full bottom-[-100px] right-[-100px] animate-pulse" />
+      </div>
+
+      <div className="container mx-auto px-4 max-w-4xl">
+        {/* 🔥 HEADER */}
+        <motion.div
+          initial={{ opacity: 0, y: 40 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6 }}
+          className="text-center mb-14"
+        >
+          <h2 className="text-3xl md:text-5xl font-extrabold bg-gradient-to-r from-cyan-400 via-pink-500 to-purple-500 bg-clip-text text-transparent">
             {title}
           </h2>
-          <p className="mt-3 text-base text-muted-foreground sm:text-lg">
-            {description}
-          </p>
-        </div>
+          <p className="mt-4 text-gray-400 text-lg">{description}</p>
+        </motion.div>
 
-        {/* FAQ List */}
-        <div className="space-y-4">
-          {faqs.map((faq, idx) => (
-            <div
-              key={idx}
-              className="rounded-lg border bg-background p-5 shadow-sm"
-            >
-              <button
-                className="flex w-full items-center justify-between text-left"
-                onClick={() => toggle(idx)}
+        {/* FAQ ITEMS */}
+        <div className="space-y-6">
+          {faqs.map((faq, idx) => {
+            const isOpen = openIndex === idx;
+
+            return (
+              <motion.div
+                key={idx}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{ delay: idx * 0.1 }}
+                className="relative group rounded-xl p-[1px]"
               >
-                <span className="font-medium text-lg">{faq.question}</span>
-                {openIndex === idx ? (
-                  <ChevronUp className="h-5 w-5 text-primary" />
-                ) : (
-                  <ChevronDown className="h-5 w-5 text-primary" />
-                )}
-              </button>
+                {/* 💡 LED BORDER */}
+                <div className="absolute inset-0 bg-gradient-to-r from-cyan-400 via-pink-500 to-purple-500 rounded-xl blur opacity-0 group-hover:opacity-100 transition duration-300"></div>
 
-              {openIndex === idx && (
-                <p className="mt-3 text-sm text-muted-foreground">
-                  {faq.answer}
-                </p>
-              )}
-            </div>
-          ))}
+                {/* ✨ CARD */}
+                <div className="relative bg-white/5 backdrop-blur-xl border border-white/10 rounded-xl p-5">
+                  {/* QUESTION */}
+                  <button
+                    onClick={() => toggle(idx)}
+                    className="flex w-full items-center justify-between text-left"
+                  >
+                    <span className="font-semibold text-lg">
+                      {faq.question}
+                    </span>
+
+                    <motion.div
+                      animate={{ rotate: isOpen ? 180 : 0 }}
+                      transition={{ duration: 0.3 }}
+                    >
+                      {isOpen ? (
+                        <ChevronUp className="text-cyan-400" />
+                      ) : (
+                        <ChevronDown className="text-cyan-400" />
+                      )}
+                    </motion.div>
+                  </button>
+
+                  {/* ANSWER */}
+                  <AnimatePresence>
+                    {isOpen && (
+                      <motion.div
+                        initial={{ height: 0, opacity: 0 }}
+                        animate={{ height: "auto", opacity: 1 }}
+                        exit={{ height: 0, opacity: 0 }}
+                        transition={{ duration: 0.4 }}
+                      >
+                        <p className="mt-4 text-gray-300 leading-relaxed">
+                          {faq.answer}
+                        </p>
+                      </motion.div>
+                    )}
+                  </AnimatePresence>
+
+                  {/* ✨ HOVER GLOW */}
+                  <div className="absolute inset-0 rounded-xl opacity-0 group-hover:opacity-100 bg-white/5 blur-xl transition"></div>
+                </div>
+              </motion.div>
+            );
+          })}
         </div>
       </div>
     </section>

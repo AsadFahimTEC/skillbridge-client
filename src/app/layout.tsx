@@ -3,13 +3,14 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 
 import { Footer2 } from "@/components/footer2";
-import { FeaturedTutors } from "@/components/feature17";
+
 // import { TutorCard } from "./components/tutors/TutorCard";
-import { HelpCenter } from "@/components/help1";
-import { Logos3 } from "@/components/logos3";
+import HelpCenterPro from "@/components/help1";
+import LogosUltra from "@/components/logos3";
 import FAQ from "./components/sections/faq";
 import { Toaster } from "sonner";
 import Navbar1 from "@/components/navbar1";
+import FeaturedTutorsUltra from "@/components/feature17";
 
 
 
@@ -45,15 +46,15 @@ export default function RootLayout({
         {children}
         <Toaster richColors></Toaster>
 
-        <FeaturedTutors></FeaturedTutors>
+        <FeaturedTutorsUltra></FeaturedTutorsUltra>
 
         {/* <TutorCard></TutorCard> */}
 
-        <Logos3></Logos3>
+        <LogosUltra></LogosUltra>
 
         <FAQ></FAQ>
 
-        <HelpCenter></HelpCenter>
+        <HelpCenterPro></HelpCenterPro>
 
         <Footer2></Footer2>
       </body>
