@@ -26,14 +26,16 @@ const formSchema = z.object({
   name: z.string().min(1, "Name is required"),
   email: z.string().email("Invalid email address"),
   password: z.string().min(8, "Password must be at least 8 characters"),
-  role: z.enum(["STUDENT", "TUTOR"]),
+  role: z.enum(["User", "Admin", "Manager", "Vendor", "Organizer"], {
+    message: "Please select a valid role"
+  }),
 });
 
 export function RegisterForm(props: React.ComponentProps<typeof Card>) {
   const router = useRouter();
 
   const handleGoogleLogin = async () => {
-    const callbackURL = `${process.env.FRONTEND_URL || "http://localhost:3000"}`;
+    const callbackURL = `${process.env.FRONTEND_URL || "https://skillbridge-client-flame.vercel.app"}`;
 
     await authClient.signIn.social({
       provider: "google",
@@ -46,7 +48,7 @@ export function RegisterForm(props: React.ComponentProps<typeof Card>) {
       name: "",
       email: "",
       password: "",
-      role: "STUDENT" as "STUDENT" | "TUTOR",
+      role: "User" as "User" | "Admin" | "Manager" | "Vendor" | "Organizer",
     },
     validators: {
       onSubmit: formSchema,
@@ -186,12 +188,15 @@ export function RegisterForm(props: React.ComponentProps<typeof Card>) {
                     value={field.state.value}
                     onChange={(e) =>
                       field.handleChange(
-                        e.target.value as "STUDENT" | "TUTOR"
+                        e.target.value as "User" | "Admin" | "Manager" | "Vendor" | "Organizer"
                       )
                     }
                   >
-                    <option value="STUDENT">🎓 Student</option>
-                    <option value="TUTOR">👨‍🏫 Tutor</option>
+                    <option value="User">🎓 User</option>
+                    <option value="Admin">👨‍🏫 Admin</option>
+                    <option value="Manager">💼 Manager</option>
+                    <option value="Vendor">🛒 Vendor</option>
+                    <option value="Organizer">🎨 Organizer</option>
                   </select>
                 </Field>
               )}

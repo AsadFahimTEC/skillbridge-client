@@ -6,8 +6,10 @@ export const useRole = () => {
 
   return {
     loading,
-    isStudent: user?.role === UserRole.STUDENT,
-    isTutor: user?.role === UserRole.TUTOR,
-    isAdmin: user?.role === UserRole.ADMIN,
+    isStudent: user?.role === UserRole.User,
+    isAdmin: user?.role === UserRole.Admin,
+    isManager: user?.role === UserRole.Manager,
+    isVendor: user?.role === UserRole.Vendor,
+    isOrganizer: user?.role === UserRole.Organizer,
   };
 };

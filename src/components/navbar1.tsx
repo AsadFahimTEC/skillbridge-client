@@ -19,6 +19,8 @@ import { useSession } from "@/hooks/useSession";
 import StudentMenu from "@/app/components/navbar/StudentMenu";
 import TutorMenu from "@/app/components/navbar/TutorMenu";
 import AdminMenu from "@/app/components/navbar/AdminMenu";
+import VendorMenu from "@/app/components/navbar/VendorMenu";
+import OrganizerMenu from "@/app/components/navbar/OrganizerMenu";
 
 export default function NavbarUltra() {
   const { user, refreshSession } = useSession();
@@ -40,12 +42,16 @@ export default function NavbarUltra() {
 
   const renderRoleMenu = () => {
     if (!user) return null;
-    if (user.role === "STUDENT")
+    if (user.role === "User")
       return <StudentMenu refreshSession={refreshSession} />;
-    if (user.role === "TUTOR")
+    if (user.role === "Admin")
       return <TutorMenu refreshSession={refreshSession} />;
-    if (user.role === "ADMIN")
+    if (user.role === "Manager")
       return <AdminMenu refreshSession={refreshSession} />;
+    if (user.role === "Vendor")
+      return <VendorMenu refreshSession={refreshSession} />;
+    if (user.role === "Organizer")
+      return <OrganizerMenu refreshSession={refreshSession} />;
   };
 
   if (!mounted) {
